@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Passcode Lock</title>
+</head>
+<body>
+    <h2>Enter Passcode:</h2>
+    <input type="password" id="passcodeInput">
+    <button onclick="sendSignal()">Unlock</button>
+    
+    <script>
+        function sendSignal() {
+            var passcode = document.getElementById("passcodeInput").value;
+            
+            if (passcode === "hopeless") {
+                // Establish serial communication with Arduino
+                var serial = new Serial();
+                
+                // Open the serial port (adjust the port name accordingly)
+                serial.open({ portName: "COM3" });
+                
+                // Send a signal to Arduino to unlock
+                serial.write("unlock");
+                
+                // Close the serial port
+                serial.close();
+                
+                // Disable the input and button to prevent reopening
+                document.getElementById("passcodeInput").disabled = true;
+                document.querySelector("button").disabled = true;
+                
+                alert("Arduino has been signaled to unlock.");
+            } else {
+                alert("Incorrect passcode.");
+            }
+        }
+    </script>
+</body>
+</html>
